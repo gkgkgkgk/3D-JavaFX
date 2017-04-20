@@ -28,6 +28,10 @@ public class ThreeDimensionalTest extends Application{
 	
 	private int time = 0;
 
+	boolean mouseDown = true;
+
+
+	double xAxis, yAxis, storedX, storedY;
 
 	public static void main(String[] args) {
         launch(args);
@@ -69,9 +73,34 @@ public class ThreeDimensionalTest extends Application{
 
     	scene.setCamera(cam);
 
+
+    	scene.setOnMousePressed(event -> {
+    		storedX = event.getSceneX();
+            storedY = event.getSceneY();
+    	});
+
+    	scene.setOnMouseDragged(event -> {
+            xAxis = event.getSceneX() - storedX;
+            yAxis = event.getSceneY() - storedY;
+            mouseDown = true;
+        });
+
+        scene.setOnMouseReleased(event -> {
+            mouseDown = false;
+        });
+
+
+
     	Timeline timeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+    			
+    			if(mouseDown){
+
+    			sphere.setRotationAxis(new Point3D(yAxis,0,xAxis));
                 sphere.setRotate(time);
-                cam.setTranslateZ(-1000+(time*5));
+                
+                }
+
+                System.out.println(yAxis);            
                 time++;
             }
         ));
